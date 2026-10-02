@@ -1,16 +1,43 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-    <meta name="theme-color" content="#090d14">
-    <meta name="description" content="Local-first CCTV security command center for go2rtc cameras.">
-    <title>Sentinel — Security Command</title>
-    <link rel="stylesheet" href="./styles.css">
-  </head>
-  <body>
-    <div id="app" aria-live="off"></div>
-    <noscript>This security dashboard requires JavaScript to be enabled.</noscript>
-    <script src="./app.js" defer></script>
-  </body>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#10121b">
+  <meta name="description" content="A personal, offline-friendly guide to brand histories, logos, labels, collaborations and rarity clues.">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="UkayFind Guide">
+  <title>UkayFind — Brand Guide</title>
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="icon" href="./favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="./guide.css">
+</head>
+<body>
+  <div class="guide-app">
+    <header class="guide-header">
+      <a class="guide-brand" href="#brands" aria-label="UkayFind brand guide home">
+        <span class="brand-mark"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="m5 20 7-11 7 15 6-11"/></svg></span>
+        <span>UkayFind <small>BRAND GUIDE</small></span>
+      </a>
+      <nav aria-label="Guide navigation">
+        <a href="#brands" data-page="brands">Brands</a>
+        <a href="#iphone" data-page="iphone">iPhone help</a>
+        <a href="#privacy" data-page="privacy">Privacy</a>
+      </nav>
+      <button class="guide-menu" id="menu-toggle" aria-label="Open navigation" aria-expanded="false">☰</button>
+    </header>
+    <main id="app-content" tabindex="-1"></main>
+    <footer class="app-footer"><span>UkayFind · Created by Jasper S. Campado</span><span>Personal reference · Stored on this device</span></footer>
+    <div id="toast-region" class="toast-region" aria-live="polite"></div>
+  </div>
+  <script src="./brand-enrichment.js" defer></script>
+  <script src="./brand-data.js" defer></script>
+  <script src="./guide-app.js" defer></script>
+  <script>
+    if ("serviceWorker" in navigator && location.protocol !== "file:") {
+      window.addEventListener("load", () => navigator.serviceWorker.register("./sw.js").catch(error => console.warn("Offline guide support could not be enabled.", error)));
+    }
+  </script>
+</body>
 </html>

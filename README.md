@@ -1,80 +1,63 @@
-# Sentinel CCTV Security Command Center
+# UkayFind Brand Guide
 
-A self-contained, local-first CCTV dashboard that runs directly in a modern browser. No build step or third-party runtime is required. Its interface adapts to desktop, tablet, mobile and TV remotes. The app uses plain browser JavaScript rather than the earlier React/TypeScript blueprint because this workspace has no Node.js toolchain; this keeps the deliverable immediately runnable and testable without a dependency install.
+A responsive, installable, single-user brand reference guide created by Jasper S. Campado. This version is intentionally focused on brand profiles, logo references, label clues, collaborations, rarity context, and offline reading.
 
-## Run
+## Run on your computer
 
-Open `index.html` in a current Chromium-based browser. For camera streaming and more reliable IndexedDB behavior, serve this folder from a trusted HTTPS origin or localhost. For example, if Python is installed, run `python -m http.server 8000` in this directory and open `http://localhost:8000`.
+From this folder, start a local web server:
 
-Configure a go2rtc base URL under **Settings → Gateway**. The application sends an SDP offer to the gateway's `/api/webrtc?src=<stream-key>` endpoint. Configure go2rtc and its reverse proxy for browser-origin access, HTTPS, and the required ICE/TURN path. Browser network discovery is intentionally not performed.
+```powershell
+python -m http.server 8000
+```
 
-## Adding an IP camera (Tapo, Yoosee, V380, etc.)
+Open <http://localhost:8000>. Python 3 is the only requirement; there is no package installation or build step. The localhost address is only for the computer running the server; entering `127.0.0.1` on an iPhone points to the iPhone itself.
 
-Sentinel does not connect directly to a camera or discover its IP address. First make the camera's RTSP stream available to go2rtc, then register the go2rtc stream name in Sentinel. Exact menus, features, and RTSP paths vary between camera models, firmware, and regions; confirm compatibility with the device's documentation.
+## Publish with GitHub Pages
 
-1. Connect the camera and the computer/server running go2rtc to the same trusted network. In your router, create a DHCP reservation for the camera so its LAN address remains stable.
-2. In the camera's official app or manual, check for **RTSP**, **ONVIF**, or **third-party NVR** support. Enable local streaming if offered and create a dedicated local camera account. Cloud/P2P access through the vendor app alone does not guarantee RTSP support.
-3. **TP-Link Tapo:** for supported models, open the camera settings in the Tapo app and look for **Advanced Settings → Camera Account** to create local credentials. Common RTSP paths are `/stream1` for the main stream and `/stream2` for a lower-resolution stream, but verify the path and support for your exact model/firmware.
-4. **Yoosee/V380:** check the exact model's app/manual for RTSP, ONVIF, or third-party NVR support and its documented URL. Availability is model/firmware dependent; some devices expose only vendor cloud/P2P service. If RTSP is not documented or enabled, do not assume a guessed URL will work.
-5. Add the camera's documented RTSP source to the go2rtc configuration, using a distinct stream name for each quality level. For example:
+This is a static website; the included GitHub Actions workflow publishes the files without a build step.
 
-   ```yaml
-   streams:
-     front_door: rtsp://CAMERA_USER:URL_ENCODED_PASSWORD@192.168.1.50:554/stream1
-     front_door_sub: rtsp://CAMERA_USER:URL_ENCODED_PASSWORD@192.168.1.50:554/stream2
-   ```
+1. Create a GitHub repository and upload the app files to its root, including `.github/workflows/pages.yml` and `.nojekyll`. If the GitHub upload page hides dot-folders, create `.github/workflows/pages.yml` with **Add file → Create new file** and paste in that workflow from this project. Do **not** upload secrets, exported browser data, or personal information.
+2. Push to the `main` or `master` branch. The **Publish UkayFind Brand Guide** workflow runs automatically; it can also be started from the repository's **Actions** tab.
+3. In the repository, open **Settings → Pages** and choose **GitHub Actions** as the build/deployment source if it is not selected already.
+4. When the workflow succeeds, open the Pages URL shown in **Settings → Pages**. For a project site it is usually `https://YOUR-NAME.github.io/YOUR-REPOSITORY/`.
+5. Open that HTTPS address in Safari on iPhone and use **Share → Add to Home Screen**.
 
-   Replace the example address, credentials, and paths with the values for your camera; the example paths are not universal. Protect the go2rtc config as it contains credentials, and URL-encode reserved characters in the password. Restart/reload go2rtc if required by your deployment, then test both named streams using go2rtc's stream page/API.
-6. In Sentinel, open **Settings → Media gateway**, enter the base URL reachable from the browser (for example, the go2rtc host's LAN address and configured port), and save. Under **Camera registry**, choose **Add camera** and enter the exact `front_door` stream name as the main stream key and `front_door_sub` as the optional low-resolution substream key. The names must match go2rtc exactly.
-7. Open **Live Cameras** and connect the new tile. Test from each network where it will be used. HTTPS-hosted dashboards need a securely reachable gateway and a working WebRTC ICE/TURN route; an RTSP test on the server alone does not prove the browser can receive WebRTC.
+GitHub Pages may make the website publicly readable. Assume every file you commit and every page you publish can be seen by other people; this guide contains no server-side private-data protection. If you need a website that only you can access, use a private HTTPS host with access controls instead. Internet refreshes update the guide saved in the current browser. New online brand searches and logo albums are not uploaded to GitHub or synchronized between devices; a shared list across browsers would require a server/database.
 
-**Security:** Change default camera passwords and keep cameras on a trusted/isolated network. Do not port-forward camera RTSP (commonly TCP 554) or expose an unauthenticated go2rtc service to the public internet. Prefer a VPN or authenticated HTTPS reverse proxy, and restrict gateway access with firewall and gateway-side authentication/authorization. Sentinel stores only stream names locally, but stream access still needs to be enforced by the gateway.
+## Use on iPhone
 
-## Included workflows
+To install this as a Home Screen web app:
 
-- First-run administrator username and four-digit PIN setup; local viewer accounts with role-limited access; inactivity locking; and a bounded best-effort sign-in log.
-- Camera registry, nine-tile grid, viewport-visible stream activation, focused stream promotion, and an explicit four-peer default stream budget.
-- Administrator-only camera registry, settings, analytics, recordings, snapshots, and a layout editor. Tile order and standard/wide/large sizes are saved locally and shared with viewer accounts.
-- go2rtc WebRTC signaling, bounded reconnect, status indicators, and teardown when streams are no longer needed.
-- Manual event capture plus optional polling of a configured analytics JSON feed.
-- IndexedDB-backed analytics cache, JPEG snapshots, and focused-stream MediaRecorder chunks.
-- Recording session browser/download, quota estimate, retention cleanup, and storage controls.
-- Automatic expiry cleanup for recordings and snapshots, plus a bounded analytics cache.
-- Voice alerts, speech mute, picture-in-picture, responsive layouts, D-pad/keyboard navigation, and keyboard shortcuts.
-- Optional per-camera restricted rectangles with low-resolution browser-side pixel-change alerts, tone/speech and a configurable trusted alarm-bridge webhook.
-- Local viewer subscription expiry countdowns, per-day visible-tab use limits, renewal links, per-viewer suspension messages, and service-wide viewer maintenance mode.
-- Per-viewer camera allow-lists: administrators choose which configured camera streams each viewer sees, with stream activation limited to the assigned cameras.
-- Optional service-worker caching for the static app shell on HTTPS/localhost; camera media and analytics still require their configured services.
+1. Make the guide available at an HTTPS website. GitHub Pages is a convenient option using the steps above, but the published site may be public. Use a private HTTPS host with access controls if you do not want other people to read the site.
+2. Open its HTTPS address in **Safari** on the iPhone.
+3. Tap **Share** → **Add to Home Screen**. Enable **Open as Web App** if iOS offers that option, then tap **Add**.
+4. Open the new Home Screen icon once while online so Safari can cache the app shell and built-in guide.
 
-## Important deployment and security limits
+The app includes the same steps and local-server warning under **iPhone help**. Its current `http://127.0.0.1:18765/` preview address is a computer-local address, not an iPhone address. A same-Wi-Fi LAN address may let an iPhone view a local server, but service-worker installation/offline support requires HTTPS (or localhost on the device itself); use private HTTPS hosting for a reliable installed app.
 
-- Cameras must already be configured in go2rtc. This browser app does not provision ONVIF devices, expose PTZ controls, run face/plate inference, or replace an NVR. AI events are consumed from the optional normalized JSON feed or entered locally.
-- Local account roles are a user-interface restriction only, not a security boundary. Anyone with developer-tools or browser-storage access can alter accounts or data. Use server-side authentication and gateway authorization for real access control.
-- Account PINs are stored as salted SHA-256 digests in `localStorage`; PINs themselves are not persisted. SHA-256 is fast and four-digit PINs can be guessed offline. Use this only for a trusted kiosk/browser profile, not to protect sensitive surveillance access.
-- The sign-in log is local, bounded, editable, and not tamper-proof. It is for convenience and troubleshooting, not compliance or authoritative audit.
-- Camera records contain go2rtc stream names, never camera passwords. Do not put credentials in gateway URLs.
-- IndexedDB is best-effort browser storage and can be evicted. This app is not an evidentiary NVR and does not guarantee continuous recording, tamper resistance, or durable retention.
-- A four-peer budget is conservative by default; actual safe decoder capacity varies by Android TV hardware, browser and codec. Nine camera tiles do not imply nine live hardware decoders.
-- Restricted-area monitoring is best-effort frame-difference motion detection, not person/vehicle detection or an AI perimeter alarm. It only evaluates streams active in this dashboard while the page is visible; sleeping browsers, closed tabs, stream outages, camera movement, lighting changes, and browser canvas security restrictions can prevent or confuse detection. Tune sensitivity and test each camera. Do not rely on it as a life-safety or security system.
-- Alarm tone and speech come from the dashboard device. Audio is not sent into a camera speaker. To drive a camera speaker or siren, configure a trusted compatible alarm bridge/webhook and hardware; the browser POST requires the bridge to permit CORS and may be blocked by network policy. A successful browser request is not proof the physical alarm sounded.
-- Subscription dates, local daily usage counters, maintenance mode, and viewer enable/disable flags are browser-local UI controls, not enforceable billing/access controls. Viewers can alter or clear local data, and different devices do not share these settings. Usage is counted only while the page is visible and the viewer is locally signed in; limits reset at local midnight and cannot prevent bypass by changing the system clock or browser storage. Use a backend for identities, payment verification, synchronized invitations, server-side expiry enforcement, trusted audit trails, and immediate remote suspension.
-- Camera assignments are also browser-local interface filtering, not gateway-level authorization. A viewer with direct access to the go2rtc gateway could bypass the dashboard and request any stream. For real camera isolation, enforce per-user stream permissions at an authenticated backend/gateway and keep stream keys private.
-- The generated viewer link is only the dashboard URL with the viewer username prefilled. It does not create or synchronize an account, include a PIN, or grant access on another device. Create/configure the account on the destination browser or use a backend identity service; share credentials through a separate secure channel.
-- Renewal/payment links are provided by the administrator. A payment does not automatically renew a local subscription: the administrator must update the viewer's subscription, unless a future trusted billing backend automates that operation. Only configure payment links from a trusted HTTPS provider.
-- A configured alarm webhook receives camera/zone identifiers and event timestamps. Use a trusted HTTPS endpoint that accepts this exact JSON payload, validates its own authorization/network controls, and does not expose a general-purpose unauthenticated command interface.
-- Face, access-control, and plate data are sensitive. Configure lawful collection, retention, access control, and audit practices at the upstream analytics service.
-- Browser and go2rtc versions differ. Validate signaling, autoplay, codec, ICE, PiP, and MediaRecorder behavior on the deployed devices and gateway version.
+## What is included
 
-## Browser data
+- 45 bundled brand profiles with histories, label/wash-tag clues, collaborations, rarity context, category filters, and search.
+- Online Wikipedia summaries refresh daily and brand searches add close matches to this browser as unverified research leads; logo-source checks run every 30 days. Both can be refreshed manually.
+- Logo albums populated from the Wikidata logo property and Wikimedia Commons file metadata. The guide checks sources automatically at most every 30 days; **Check logo sources** forces an immediate check. Commons file revisions appear in the album, and a changed linked file/content keeps the prior version when its versioned image is available.
+- Bundled Simple Icons marks as offline fallbacks for some brands; versioned Wikimedia album images are clearly labeled when they are unavailable offline.
+- A privacy switch for external brand lookups and a control to clear saved online summaries, discoveries, and logo-history records.
+- A service-worker app shell for offline use.
 
-Application data is local to the current browser profile. Resetting browser data can remove local accounts and all locally stored recordings, snapshots, and cached events. Use the Settings retention controls before clearing data. The service worker caches only the static application shell, never camera streams or analytics responses. No cloud synchronization, LAN scanning, or automatic camera credential discovery is included. Older single-PIN profiles are migrated to an `admin` username using the existing PIN digest.
+## Logo sourcing and limits
 
-## Accounts and layout
+Online logo images are **Wikidata/Wikimedia Commons candidates**, not a guarantee that a logo is current, official, or approved by the brand. Wikimedia records can be incomplete or edited; an updated source-file link does not prove the company changed its identity. Compare every image with the brand's official website and the linked source file. Check the image's licence and trademark terms before reuse or redistribution.
 
-On first launch, create an administrator username and PIN, then confirm the PIN. Sign in with that username and PIN on later visits. Add multiple cameras from the camera registry, then create or edit a viewer in **Settings → Viewer access & subscriptions** and check only the camera streams they may see. A new viewer starts with no cameras assigned until selected; their grid, camera selection shortcuts, PiP, and automatic stream connections are restricted to their assigned cameras. Legacy local viewer accounts without an explicit assignment retain access to configured cameras until you save their camera selection. Viewers can switch grid/focus mode, use PiP, mute voice alerts, and sign out. They cannot change system settings, camera setup/layout, analytics, snapshots, or recordings. Administrators can open **Arrange tiles** on the camera view to move cameras up/down and cycle each tile through standard, wide, and large sizes. These preferences are stored with the local camera registry.
+Album dates are repository/file dates, not verified logo adoption or retirement dates. The guide can show recent versions from a Commons file history; it cannot reconstruct marks never represented in that file. It begins retaining later source changes after it has observed a file. Saved image URLs need internet access; the existing bundled Simple Icons marks are available offline. External-service availability, browser caching, and local-storage limits can affect refreshes.
 
-The admin Settings page also shows the latest local sign-in attempts. It does not record PINs and is not tamper-proof. Administrators can set a viewer's subscription duration in days, daily visible-tab allowance in hours, renewal/payment URL, allowed cameras, enabled state, and maintenance message. Use 0 for no subscription expiry or unlimited daily use. Service-wide maintenance mode blocks local viewer sessions but leaves administrators available. Changes apply only to this browser profile.
+Simple Icons artwork is bundled as offline brand marks for a subset of profiles. Where no bundled mark or sourced image is available, the guide shows the brand name as text rather than inventing logo artwork.
 
-To create a restricted area, configure the gateway, open **Settings → Restricted areas & alarms**, connect a camera in the live view, choose **Draw area** on the camera tile (or choose a camera from Settings), wait for its image, and drag around the region. For a TV remote, focus the drawing surface, press Enter, use the arrow keys to place the first and opposite corners, then press Enter to save; press Escape to cancel. Enable restricted-zone monitoring and test audio on the dashboard device. Frame changes are sampled at low resolution, require two changed samples, and are throttled to one alert per area per 30 seconds. Lower sensitivity values detect smaller changes and can create more false alarms. Motion events are stored in the local analytics cache. For an external alarm, configure a trusted HTTPS bridge URL; test its CORS and physical output separately.
+## Privacy and accuracy
 
-The admin Settings page also shows the latest local sign-in attempts. It does not record PINs and is not tamper-proof. Administrators can reset local accounts from Settings while signed in; this resets all accounts and starts administrator setup again, but leaves camera and recording data intact. The sign-in screen deliberately has no account-reset control. If the admin PIN is forgotten, the trusted browser-profile owner must clear the app's local account storage; do not expose developer tools or storage controls to viewers.
+The app has no account, application server, user sync, marketplace, live valuation, computer-vision model, or community feature. Brand data and settings are saved to this browser's local storage; anyone with access to the same browser profile can access them. This app does not upload photographs.
+
+When online lookup is enabled, brand names are sent to Wikipedia, Wikidata, and Wikimedia Commons. Search providers may receive those terms. Photos, profile information, and other activity are not sent. Disable online lookups under **Privacy** to keep guide browsing on-device. Built-in reference content remains available offline.
+
+Online research leads, summaries, logo candidates, older label clues, and collaboration examples may be incomplete. Logo-source changes are not verified rebrands. Rarity is about an exact item and requires evidence and provenance; the guide does not authenticate goods or estimate value.
+
+**Created by Jasper S. Campado.**
