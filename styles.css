@@ -213,6 +213,15 @@ tr:last-child td { border-bottom: 0; }
 .camera-assignment input { margin-top: 3px; accent-color: var(--accent); }
 .camera-assignment span { display: grid; gap: 3px; }
 .camera-assignment strong { font-size: 11px; font-weight: 600; }
+.camera-discovery { grid-column: 1 / -1; border: 1px solid var(--line); border-radius: 9px; padding: 12px; margin-bottom: 14px; }
+.camera-discovery-heading { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
+.camera-discovery-heading strong { color: var(--text); font-size: 12px; }
+.camera-discovery-heading p, .camera-discovery > small { display: block; color: var(--muted); font-size: 10px; line-height: 1.5; margin: 5px 0 10px; }
+.camera-discovery-results { display: grid; gap: 6px; max-height: 190px; overflow: auto; margin: 8px 0; }
+.camera-discovery-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 8px; border-radius: 7px; background: var(--panel-2); }
+.camera-discovery-row > div { display: grid; gap: 3px; min-width: 0; }
+.camera-discovery-row strong { font-size: 11px; overflow-wrap: anywhere; }
+.camera-discovery-row small { color: var(--muted); font-size: 9px; overflow-wrap: anywhere; }
 .camera-assignment small { color: var(--muted); font-size: 10px; }
 .viewer-plan { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 16px; margin-bottom: 15px; padding: 11px 13px; border: 1px solid #294b43; border-radius: 9px; background: #0e1b1a; color: #b8d6cb; font-size: 11px; }
 .viewer-plan strong { color: var(--accent); }

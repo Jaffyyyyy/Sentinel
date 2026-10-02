@@ -16,7 +16,7 @@
     "sync-analytics", "refresh-storage", "cleanup-recordings", "play-session", "view-snapshot",
     "delete-snapshot", "delete-session", "export-data", "reset-app", "layout-edit",
     "move-camera", "camera-size", "delete-user", "delete-zone", "draw-zone", "save-access",
-    "copy-user-link", "test-alarm", "cancel-zone",
+    "copy-user-link", "test-alarm", "cancel-zone", "scan-cameras", "use-discovered-camera",
   ]);
   const SETTINGS_KEY = "sentinel.settings.v1";
   const DEFAULT_SETTINGS = {
@@ -623,7 +623,7 @@
     if (!isAdmin()) return `<div class="empty-state"><strong>Administrator access required</strong>Sign in with an administrator account to manage system settings.</div>`;
     const maxStreams = Number(state.settings.maxStreams);
     return `<div class="settings-grid"><div>
-      <section class="panel"><h3>Media gateway</h3><p class="panel-description">Set an explicit go2rtc base URL. Local IP, Tailscale, Cloudflare Tunnel, and reverse-proxy hostnames are supported when DNS, TLS, browser policy, and ICE are correctly configured. The browser does not scan the network.</p>
+      <section class="panel"><h3>Media gateway</h3><p class="panel-description">Set an explicit go2rtc base URL. Local IP, Tailscale, Cloudflare Tunnel, and reverse-proxy hostnames are supported when DNS, TLS, browser policy, and ICE are correctly configured. Nearby ONVIF discovery uses the optional local helper; the browser cannot scan the LAN by itself.</p>
         <details class="camera-setup-help"><summary>IP camera setup guide (Tapo, Yoosee, V380 and other RTSP cameras)</summary>
           <ol>
             <li>Connect the camera and the go2rtc host to the same trusted LAN. In your router, reserve a stable DHCP address for the camera.</li>
@@ -775,7 +775,14 @@
     if (modal.type === "camera") {
       const camera = modal.camera || {};
       title = camera.id ? "Edit camera" : "Add camera";
-      body = `<form data-form="camera" id="camera-form" class="form-grid">
+      const discovery = modal.discovery || { devices: [], error: "" };
+      body = `<section class="camera-discovery">
+        <div class="camera-discovery-heading"><div><strong>Find nearby ONVIF cameras</strong><p>Scans this local network using the optional helper. Non-ONVIF cameras must be added manually using their go2rtc stream name.</p></div><button class="btn small" type="button" data-action="scan-cameras" ${modal.discoveryBusy ? "disabled" : ""}>${modal.discoveryBusy ? "Scanning…" : "Scan network"}</button></div>
+        ${discovery.error ? `<div class="notice warning">${escapeHtml(discovery.error)}</div>` : ""}
+        ${discovery.devices.length ? `<div class="camera-discovery-results">${discovery.devices.map((device) => `<div class="camera-discovery-row"><div><strong>${escapeHtml(device.name || "ONVIF camera")}</strong><small>${escapeHtml(device.address)} · ${escapeHtml(device.types || "ONVIF device")}</small>${device.xaddrs?.length ? `<small>${escapeHtml(device.xaddrs.join(" · "))}</small>` : ""}</div><button class="btn small" type="button" data-action="use-discovered-camera" data-address="${escapeHtml(device.address)}" data-name="${escapeHtml(device.name || "")}">Use</button></div>`).join("")}</div>` : modal.discoveryBusy ? `<p class="section-description">Waiting for ONVIF responses…</p>` : ""}
+        <small>Discovery finds ONVIF-compatible devices on the same LAN only. It cannot discover every brand/protocol or cloud-only camera, and it does not configure the camera or go2rtc for you.</small>
+      </section>
+      <form data-form="camera" id="camera-form" class="form-grid">
         <input type="hidden" name="id" value="${escapeHtml(camera.id || "")}">
         <div class="field"><label for="cameraName">Camera name</label><input id="cameraName" name="name" maxlength="80" required value="${escapeHtml(camera.name || "")}" placeholder="North gate"></div>
         <div class="field"><label for="cameraLocation">Location</label><input id="cameraLocation" name="location" maxlength="100" value="${escapeHtml(camera.location || "")}" placeholder="Building A"></div>
@@ -2040,6 +2047,38 @@
     openModal({ type: "camera", camera });
   }
 
+  async function scanNearbyCameras() {
+    if (!requireAdmin() || state.modal?.type !== "camera") return;
+    state.modal.discoveryBusy = true;
+    state.modal.discovery = { devices: [], error: "" };
+    renderModal();
+    try {
+      const response = await fetchWithTimeout("http://127.0.0.1:8766/api/discover?timeout=3", { method: "GET", cache: "no-store" }, 8000);
+      if (!response.ok) throw new Error(`Local camera discovery helper returned HTTP ${response.status}.`);
+      const result = await response.json();
+      if (!Array.isArray(result.devices)) throw new Error("The local discovery helper returned an invalid device list.");
+      const devices = result.devices.filter((device) =>
+        device && typeof device.address === "string" && device.address.length <= 80
+        && typeof device.name === "string" && device.name.length <= 200
+        && Array.isArray(device.xaddrs) && device.xaddrs.every((url) => typeof url === "string" && url.length <= 500))
+        .slice(0, 64);
+      state.modal.discovery = { devices, error: devices.length ? "" : "No ONVIF cameras replied. Check that they support ONVIF and are on the same LAN, or add a camera manually through go2rtc." };
+    } catch (error) {
+      const message = error.name === "AbortError"
+        ? "Camera discovery timed out. Check that the helper is running at 127.0.0.1:8766."
+        : error instanceof TypeError
+          ? "Could not reach the local discovery helper. Start onvif_discovery.py and allow local network access in the browser."
+          : error.message || "Camera discovery failed.";
+      state.modal.discovery = { devices: [], error: message };
+      console.error("Nearby camera discovery failed:", error);
+    } finally {
+      if (state.modal?.type === "camera") {
+        state.modal.discoveryBusy = false;
+        renderModal();
+      }
+    }
+  }
+
   function resetLocalPin() {
     if (state.auth !== "unlocked") {
       if (!window.confirm("Remove all local accounts and set up a new administrator? Camera data, recordings, and access log remain.")) return;
@@ -2299,6 +2338,12 @@
     if (action === "navigate") setView(button.dataset.view);
     else if (action === "select-camera" || action === "focus-camera") focusCamera(cameraId);
     else if (action === "add-camera") openCameraEditor();
+    else if (action === "scan-cameras") scanNearbyCameras();
+    else if (action === "use-discovered-camera") {
+      const address = button.dataset.address || "";
+      const suggestedName = String(button.dataset.name || "").replace(/[^a-z0-9]+/gi, "_").replace(/^_+|_+$/g, "").toLowerCase().slice(0, 50);
+      openCameraEditor({ name: button.dataset.name || `Camera ${address}`, location: address, streamKey: suggestedName || `camera_${address.replace(/[^0-9]+/g, "_")}`, substreamKey: "" });
+    }
     else if (action === "edit-camera") openCameraEditor(cameraById(cameraId));
     else if (action === "delete-camera") {
       const camera = cameraById(cameraId);
