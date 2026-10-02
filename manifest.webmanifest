@@ -1,0 +1,17 @@
+{
+  "name": "UkayFind Brand Guide",
+  "short_name": "UkayFind Guide",
+  "description": "A personal, offline-friendly guide to brand histories, logos and label clues.",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#10121b",
+  "theme_color": "#10121b",
+  "icons": [
+    {
+      "src": "./favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

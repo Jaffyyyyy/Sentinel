@@ -1,0 +1,173 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080" fill="none">
+  <defs>
+    <linearGradient id="bg" x1="110" y1="50" x2="1770" y2="1030" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#080D1D"/>
+      <stop offset=".55" stop-color="#11132B"/>
+      <stop offset="1" stop-color="#081C2A"/>
+    </linearGradient>
+    <radialGradient id="aura" cx="0" cy="0" r="1" gradientTransform="matrix(670 360 -410 763 1390 505)" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#7B4DFF" stop-opacity=".32"/>
+      <stop offset=".55" stop-color="#20D9D2" stop-opacity=".1"/>
+      <stop offset="1" stop-color="#0A1020" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="accent" x1="139" y1="0" x2="780" y2="600" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#77F4D0"/>
+      <stop offset=".52" stop-color="#54B8FF"/>
+      <stop offset="1" stop-color="#B590FF"/>
+    </linearGradient>
+    <linearGradient id="glass" x1="1180" y1="226" x2="1694" y2="832" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFFFFF" stop-opacity=".14"/>
+      <stop offset="1" stop-color="#FFFFFF" stop-opacity=".035"/>
+    </linearGradient>
+    <linearGradient id="card" x1="1274" y1="290" x2="1650" y2="744" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#243050"/>
+      <stop offset="1" stop-color="#151B35"/>
+    </linearGradient>
+    <filter id="blur" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="42"/>
+    </filter>
+    <filter id="shadow" x="-30%" y="-30%" width="160%" height="180%">
+      <feDropShadow dx="0" dy="24" stdDeviation="28" flood-color="#020611" flood-opacity=".55"/>
+    </filter>
+    <filter id="glow" x="-100%" y="-100%" width="300%" height="300%">
+      <feGaussianBlur stdDeviation="9" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <pattern id="grid" width="48" height="48" patternUnits="userSpaceOnUse">
+      <path d="M48 0H0V48" stroke="#A9C5FF" stroke-opacity=".055" stroke-width="1"/>
+    </pattern>
+  </defs>
+
+  <rect width="1920" height="1080" fill="url(#bg)"/>
+  <rect width="1920" height="1080" fill="url(#grid)"/>
+  <rect width="1920" height="1080" fill="url(#aura)"/>
+  <ellipse cx="1460" cy="510" rx="410" ry="300" fill="#7F56FF" fill-opacity=".19" filter="url(#blur)"/>
+  <ellipse cx="1400" cy="680" rx="330" ry="180" fill="#19D7C3" fill-opacity=".12" filter="url(#blur)"/>
+
+  <!-- Header -->
+  <g transform="translate(112 78)">
+    <rect width="48" height="48" rx="15" fill="url(#accent)"/>
+    <path d="M14 29.5 23.5 14l10 20 8-13" stroke="#091321" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="64" y="34" fill="#F6F8FF" font-family="Inter, Arial, sans-serif" font-size="25" font-weight="700" letter-spacing=".2">UKAYFIND <tspan fill="#83EBD2">AI</tspan></text>
+  </g>
+  <g transform="translate(1498 82)">
+    <rect width="310" height="44" rx="22" fill="#FFFFFF" fill-opacity=".06" stroke="#FFFFFF" stroke-opacity=".14"/>
+    <circle cx="23" cy="22" r="5" fill="#74F1CF" filter="url(#glow)"/>
+    <text x="41" y="28" fill="#D8E1F8" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="600" letter-spacing="1.5">PRODUCT INTELLIGENCE GRAPH</text>
+  </g>
+
+  <!-- Left copy -->
+  <g>
+    <text x="116" y="310" fill="#91A6C8" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="700" letter-spacing="4">THE WORLD, IDENTIFIED.</text>
+    <text x="110" y="418" fill="#F7F8FF" font-family="Inter, Arial, sans-serif" font-size="88" font-weight="750" letter-spacing="-4">Every item has</text>
+    <text x="110" y="520" fill="url(#accent)" font-family="Inter, Arial, sans-serif" font-size="88" font-weight="750" letter-spacing="-4">a story.</text>
+    <text x="116" y="590" fill="#C0C9DD" font-family="Inter, Arial, sans-serif" font-size="25" font-weight="400">Recognize. Research. Authenticate. Contextualize.</text>
+    <text x="116" y="630" fill="#94A1BA" font-family="Inter, Arial, sans-serif" font-size="20" font-weight="400">One living intelligence graph for fashion, collectibles,</text>
+    <text x="116" y="660" fill="#94A1BA" font-family="Inter, Arial, sans-serif" font-size="20" font-weight="400">and everything still waiting to be discovered.</text>
+    <g transform="translate(116 722)">
+      <rect width="222" height="58" rx="17" fill="url(#accent)"/>
+      <text x="28" y="37" fill="#071522" font-family="Inter, Arial, sans-serif" font-size="17" font-weight="750">DISCOVER THE GRAPH</text>
+      <path d="M190 22v14m-6-7h12" stroke="#071522" stroke-width="2" stroke-linecap="round"/>
+    </g>
+    <g transform="translate(362 722)">
+      <rect width="188" height="58" rx="17" fill="#FFFFFF" fill-opacity=".045" stroke="#FFFFFF" stroke-opacity=".18"/>
+      <text x="28" y="37" fill="#D4DEF4" font-family="Inter, Arial, sans-serif" font-size="17" font-weight="600">Built on evidence</text>
+    </g>
+  </g>
+
+  <!-- Knowledge graph arcs -->
+  <g opacity=".78">
+    <path d="M1258 322 1408 398 1580 318M1408 398l154 160m-154-160-68 223m68-223 234 151m-234-151 111-212M1340 621l222-63m-222 63 104 120m118-386-20 386m-192-343 90 223" stroke="url(#accent)" stroke-opacity=".55" stroke-width="2"/>
+    <path d="M1258 322 1340 621 1562 558 1642 343 1408 398 1444 741 1562 558 1340 621" stroke="#B2A6FF" stroke-opacity=".16" stroke-width="1" stroke-dasharray="5 10"/>
+  </g>
+  <g filter="url(#glow)">
+    <circle cx="1258" cy="322" r="7" fill="#71EED0"/>
+    <circle cx="1408" cy="398" r="9" fill="#77D8FF"/>
+    <circle cx="1580" cy="318" r="6" fill="#B89BFF"/>
+    <circle cx="1562" cy="558" r="9" fill="#70EBD1"/>
+    <circle cx="1340" cy="621" r="7" fill="#84CFFF"/>
+    <circle cx="1444" cy="741" r="6" fill="#B79AFF"/>
+    <circle cx="1642" cy="343" r="5" fill="#80E9D3"/>
+    <circle cx="1638" cy="709" r="5" fill="#75CFFF"/>
+    <circle cx="1545" cy="186" r="4" fill="#BB9CFF"/>
+    <circle cx="1191" cy="496" r="4" fill="#6EE8D0"/>
+  </g>
+
+  <!-- Floating glass interface -->
+  <g filter="url(#shadow)">
+    <rect x="1170" y="204" width="550" height="630" rx="34" fill="url(#glass)" stroke="#FFFFFF" stroke-opacity=".2"/>
+    <rect x="1192" y="226" width="506" height="586" rx="24" fill="#0C1328" fill-opacity=".7" stroke="#FFFFFF" stroke-opacity=".08"/>
+    <text x="1224" y="270" fill="#A9B8D4" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" letter-spacing="2">ITEM INTELLIGENCE</text>
+    <circle cx="1650" cy="260" r="4" fill="#6FE9CC"/>
+    <text x="1663" y="265" fill="#9CE9D6" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="600">LIVE GRAPH</text>
+
+    <!-- Product image card -->
+    <rect x="1224" y="294" width="218" height="264" rx="19" fill="url(#card)" stroke="#FFFFFF" stroke-opacity=".1"/>
+    <ellipse cx="1334" cy="504" rx="77" ry="15" fill="#050916" fill-opacity=".55"/>
+    <path d="M1298 356c16-17 30-24 44-24 16 0 28 10 43 27l20 21-18 24-14-11-4 91h-94l-4-90-15 10-17-24 26-24 33 16z" fill="#C7B79C"/>
+    <path d="m1293 392 41 20 42-21m-82 72h83" stroke="#806E58" stroke-width="4" stroke-linecap="round"/>
+    <path d="M1309 346c10 10 20 15 34 16m-57 21 48 27 52-24" stroke="#E4D8C7" stroke-width="3" stroke-linecap="round"/>
+    <rect x="1240" y="311" width="81" height="25" rx="12.5" fill="#0A1528" fill-opacity=".75"/>
+    <circle cx="1255" cy="323.5" r="3.5" fill="#70EBD1"/>
+    <text x="1265" y="328" fill="#C5F4E9" font-family="Inter, Arial, sans-serif" font-size="10" font-weight="700" letter-spacing=".8">TAG SCAN</text>
+
+    <!-- Match details -->
+    <text x="1464" y="323" fill="#8FA0BF" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700" letter-spacing="1.5">TOP CANDIDATE</text>
+    <text x="1464" y="357" fill="#F4F6FF" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="700">Archive Sportswear</text>
+    <text x="1464" y="384" fill="#A2AEC7" font-family="Inter, Arial, sans-serif" font-size="14">Vintage track jacket</text>
+    <rect x="1464" y="408" width="202" height="7" rx="3.5" fill="#FFFFFF" fill-opacity=".1"/>
+    <rect x="1464" y="408" width="154" height="7" rx="3.5" fill="url(#accent)"/>
+    <text x="1464" y="440" fill="#78E8CD" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700">76% MATCH</text>
+    <text x="1464" y="475" fill="#D1D9EA" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700" letter-spacing="1">WHY THIS MATCH</text>
+    <circle cx="1470" cy="498" r="3" fill="#72EBD0"/>
+    <text x="1482" y="503" fill="#AEBAD0" font-family="Inter, Arial, sans-serif" font-size="12">Logo shape similarity</text>
+    <circle cx="1470" cy="522" r="3" fill="#72EBD0"/>
+    <text x="1482" y="527" fill="#AEBAD0" font-family="Inter, Arial, sans-serif" font-size="12">Tag typography &amp; era</text>
+
+    <!-- Evidence strip -->
+    <path d="M1224 582h442" stroke="#FFFFFF" stroke-opacity=".1"/>
+    <text x="1224" y="612" fill="#E3E9F6" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" letter-spacing="1">CONNECTED EVIDENCE</text>
+    <g transform="translate(1224 630)">
+      <rect width="133" height="43" rx="12" fill="#FFFFFF" fill-opacity=".055" stroke="#FFFFFF" stroke-opacity=".09"/>
+      <circle cx="17" cy="21.5" r="4" fill="#74EBD0"/>
+      <text x="29" y="26" fill="#CFD8EA" font-family="Inter, Arial, sans-serif" font-size="11">Tag archive</text>
+    </g>
+    <g transform="translate(1367 630)">
+      <rect width="133" height="43" rx="12" fill="#FFFFFF" fill-opacity=".055" stroke="#FFFFFF" stroke-opacity=".09"/>
+      <circle cx="17" cy="21.5" r="4" fill="#76CAFF"/>
+      <text x="29" y="26" fill="#CFD8EA" font-family="Inter, Arial, sans-serif" font-size="11">Era timeline</text>
+    </g>
+    <g transform="translate(1510 630)">
+      <rect width="156" height="43" rx="12" fill="#FFFFFF" fill-opacity=".055" stroke="#FFFFFF" stroke-opacity=".09"/>
+      <circle cx="17" cy="21.5" r="4" fill="#B495FF"/>
+      <text x="29" y="26" fill="#CFD8EA" font-family="Inter, Arial, sans-serif" font-size="11">Community review</text>
+    </g>
+    <rect x="1224" y="697" width="442" height="79" rx="16" fill="#72EBD0" fill-opacity=".07" stroke="#72EBD0" stroke-opacity=".23"/>
+    <path d="M1247 724h14m-7-7v14" stroke="#82EFD7" stroke-width="2" stroke-linecap="round"/>
+    <text x="1274" y="726" fill="#D8F8EF" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700">Evidence-led, never guesswork.</text>
+    <text x="1274" y="749" fill="#A9C7C5" font-family="Inter, Arial, sans-serif" font-size="11">A candidate is a starting point—not an authentication guarantee.</text>
+  </g>
+
+  <!-- Bottom stat rail -->
+  <path d="M112 904h1696" stroke="#FFFFFF" stroke-opacity=".13"/>
+  <g transform="translate(116 938)">
+    <text fill="#83E8D0" font-family="Inter, Arial, sans-serif" font-size="27" font-weight="750">100K+</text>
+    <text y="31" fill="#8594AE" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="600" letter-spacing="1">BRANDS, AND GROWING</text>
+  </g>
+  <path d="M390 932v58" stroke="#FFFFFF" stroke-opacity=".13"/>
+  <g transform="translate(432 938)">
+    <text fill="#87D2FF" font-family="Inter, Arial, sans-serif" font-size="27" font-weight="750">10M+</text>
+    <text y="31" fill="#8594AE" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="600" letter-spacing="1">PRODUCTS</text>
+  </g>
+  <path d="M655 932v58" stroke="#FFFFFF" stroke-opacity=".13"/>
+  <g transform="translate(698 938)">
+    <text fill="#B79AFF" font-family="Inter, Arial, sans-serif" font-size="27" font-weight="750">500M+</text>
+    <text y="31" fill="#8594AE" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="600" letter-spacing="1">IMAGE REFERENCES</text>
+  </g>
+  <path d="M960 932v58" stroke="#FFFFFF" stroke-opacity=".13"/>
+  <g transform="translate(1002 938)">
+    <text fill="#F2F4FB" font-family="Inter, Arial, sans-serif" font-size="17" font-weight="600">Built to learn from the world.</text>
+    <text y="30" fill="#8997AF" font-family="Inter, Arial, sans-serif" font-size="13">Supported by evidence, experts, and community knowledge.</text>
+  </g>
+  <text x="1806" y="982" text-anchor="end" fill="#64728C" font-family="Inter, Arial, sans-serif" font-size="12" letter-spacing="1">CREATED BY JASPER S. CAMPADO</text>
+</svg>
