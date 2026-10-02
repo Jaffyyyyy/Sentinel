@@ -1,6 +1,6 @@
 "use strict";
 
-const CACHE_NAME = "sentinel-shell-v12";
+const CACHE_NAME = "sentinel-shell-v13";
 const APP_SHELL = ["./", "./index.html", "./styles.css", "./app.js"];
 
 self.addEventListener("install", (event) => {

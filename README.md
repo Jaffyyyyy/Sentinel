@@ -6,11 +6,26 @@ A self-contained, local-first CCTV dashboard that runs directly in a modern brow
 
 Open `index.html` in a current Chromium-based browser. For camera streaming and more reliable IndexedDB behavior, serve this folder from a trusted HTTPS origin or localhost. For example, if Python is installed, run `python -m http.server 8000` in this directory and open `http://localhost:8000`.
 
-Configure a go2rtc base URL under **Settings → Gateway**. The application sends an SDP offer to the gateway's `/api/webrtc?src=<stream-key>` endpoint. Configure go2rtc and its reverse proxy for browser-origin access, HTTPS, and the required ICE/TURN path. Browser network discovery is intentionally not performed.
+Configure a go2rtc base URL under **Settings → Media gateway**. The application sends an SDP offer to the gateway's `/api/webrtc?src=<stream-key>` endpoint. Configure go2rtc and its reverse proxy for browser-origin access, HTTPS, and the required ICE/TURN path. The browser cannot scan LAN devices on its own; optional nearby ONVIF discovery uses the loopback helper described below.
 
 ## Adding an IP camera (Tapo, Yoosee, V380, etc.)
 
-Sentinel does not connect directly to a camera or discover its IP address. First make the camera's RTSP stream available to go2rtc, then register the go2rtc stream name in Sentinel. Exact menus, features, and RTSP paths vary between camera models, firmware, and regions; confirm compatibility with the device's documentation.
+Sentinel uses go2rtc for camera video. For easier setup it can discover ONVIF-compatible devices on the local LAN, but discovery does not automatically configure a stream. Other camera types and cameras that do not advertise ONVIF must be added manually using a documented RTSP source in go2rtc. No single application can connect to every proprietary camera protocol; cloud/P2P-only devices may not support local streaming at all.
+
+### Nearby ONVIF discovery
+
+1. Run the optional helper on a Windows/Linux computer connected to the same LAN as the cameras (normally the go2rtc host). Python 3.10 or newer is required; the helper uses only Python's standard library:
+
+   ```powershell
+   py onvif_discovery.py
+   ```
+
+   Keep its terminal running while scanning. It listens only on `127.0.0.1:8766` and needs UDP multicast on the local network. If your firewall prompts, allow Python on the trusted **Private** network only.
+2. Open Sentinel in a current browser on that same computer, open **Settings → Camera registry → Add camera**, and click **Scan network**. If the list is empty, verify ONVIF is enabled on the camera and that multicast/UDP 3702 is allowed between the computer and camera VLAN.
+3. Select a result to prefill its name and IP address. This only adds camera details to Sentinel; it does not retrieve credentials or RTSP paths and does not configure go2rtc. Create and test a named stream in go2rtc, then enter that exact stream name in Sentinel's **Main stream key** field before saving.
+4. Stop the helper with Ctrl+C when discovery is finished.
+
+The helper sends ONVIF WS-Discovery multicast only on the local network and returns advertised device addresses. It does not authenticate to cameras, read video, or scan IP ranges. GitHub Pages and other remote browsers cannot scan the viewer's LAN directly; the local helper must be running on the same computer as the browser. Browser private-network permission and network/VLAN multicast policy may also apply.
 
 1. Connect the camera and the computer/server running go2rtc to the same trusted network. In your router, create a DHCP reservation for the camera so its LAN address remains stable.
 2. In the camera's official app or manual, check for **RTSP**, **ONVIF**, or **third-party NVR** support. Enable local streaming if offered and create a dedicated local camera account. Cloud/P2P access through the vendor app alone does not guarantee RTSP support.
@@ -34,6 +49,7 @@ Sentinel does not connect directly to a camera or discover its IP address. First
 
 - First-run administrator username and four-digit PIN setup; local viewer accounts with role-limited access; inactivity locking; and a bounded best-effort sign-in log.
 - Camera registry, nine-tile grid, viewport-visible stream activation, focused stream promotion, and an explicit four-peer default stream budget.
+- Optional loopback-only ONVIF WS-Discovery helper for nearby same-LAN device discovery; non-ONVIF devices continue through manual go2rtc stream setup.
 - Administrator-only camera registry, settings, analytics, recordings, snapshots, and a layout editor. Tile order and standard/wide/large sizes are saved locally and shared with viewer accounts.
 - go2rtc WebRTC signaling, bounded reconnect, status indicators, and teardown when streams are no longer needed.
 - Manual event capture plus optional polling of a configured analytics JSON feed.
@@ -49,6 +65,7 @@ Sentinel does not connect directly to a camera or discover its IP address. First
 ## Important deployment and security limits
 
 - Cameras must already be configured in go2rtc. This browser app does not provision ONVIF devices, expose PTZ controls, run face/plate inference, or replace an NVR. AI events are consumed from the optional normalized JSON feed or entered locally.
+- Nearby discovery only identifies devices that answer ONVIF WS-Discovery multicast. It is not universal camera support, does not discover cloud/P2P-only devices, does not scan IP ranges, and does not configure streams. The optional Python helper must run on the same computer as the browser and must be stopped when not in use.
 - Local account roles are a user-interface restriction only, not a security boundary. Anyone with developer-tools or browser-storage access can alter accounts or data. Use server-side authentication and gateway authorization for real access control.
 - Account PINs are stored as salted SHA-256 digests in `localStorage`; PINs themselves are not persisted. SHA-256 is fast and four-digit PINs can be guessed offline. Use this only for a trusted kiosk/browser profile, not to protect sensitive surveillance access.
 - The sign-in log is local, bounded, editable, and not tamper-proof. It is for convenience and troubleshooting, not compliance or authoritative audit.
